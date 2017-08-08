@@ -26,7 +26,10 @@ class CustomStreamListener(tweepy.StreamListener):
         # Set max queue size
         args = {"x-max-length" : 2000}
 
-        self.channel.queue_declare(queue='twitter_topic_feed', arguments=args)
+        # self.channel.queue_declare(queue='twitter_topic_feed', arguments=args)
+        # Exchange with fanout to all consumers
+        self.channel.exchange_declare(exchange='twitter',
+                                      type='fanout')
 
     def on_status(self, status):
         data = {}
@@ -36,9 +39,14 @@ class CustomStreamListener(tweepy.StreamListener):
         data['source'] = status.source
 
         # Queue the tweet
-        self.channel.basic_publish(exchange='',
-                                   routing_key='twitter_topic_feed',
+        # self.channel.basic_publish(exchange='',
+        #                            routing_key='twitter_topic_feed',
+        #                            body=json.dumps(data))
+        # Send tweet to exchange
+        self.channel.basic_publish(exchange='twitter',
+                                   routing_key='',
                                    body=json.dumps(data))
+
         print('Sent: ', status.text.encode(sys.stdout.encoding, errors='replace'), '\n')
 
     def on_error(self, status_code):
