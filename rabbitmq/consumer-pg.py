@@ -27,11 +27,7 @@ try:
 
     print("Connecting to database\n ->%s" % connection_string)
     conn = pg.connect(connection_string)
-    conn.autocommit = True
-    # conn = pg.connect("dbname='" + DB_CONFIG.db +
-    #                   "' user='" + DB_CONFIG.user +
-    #                   "' host='" + DB_CONFIG.host +
-    #                   "' password='" + DB_CONFIG.password + "'")
+    conn.autocommit = True # don't need to commit after each query
     print("Connected to database...")
     cur = conn.cursor()
 except:

@@ -1,0 +1,28 @@
+{
+  "name": "sbux-web",
+  "version": "0.0.1",
+  "main": "app.js",
+  "scripts": {
+    "start": "webpack-dev-server --open",
+    "server": "node app.js",
+    "build": "webpack"
+  },
+  "dependencies": {
+    "body-parser": "1.17.1",
+    "bootstrap": "^3.3.7",
+    "cookie-parser": "1.4.3",
+    "d3": "3.5.5",
+    "debug": "2.6.3",
+    "express": "4.15.2",
+    "lodash": "^4.17.4",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "request": "2.81.0",
+    "request-promise": "4.2.1",
+    "serve-favicon": "2.4.2"
+  },
+  "devDependencies": {
+    "webpack": "^3.5.5",
+    "webpack-dev-middleware": "^1.12.0"
+  }
+}

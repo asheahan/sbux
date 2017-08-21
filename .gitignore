@@ -1,2 +1,3 @@
 rabbitmq/config.json
 rabbitmq/venv/
+web/node_modules/
