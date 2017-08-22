@@ -5,12 +5,7 @@ const bodyParser = require('body-parser'),
   express = require('express'),
   favicon = require('serve-favicon'),
   http = require('http'),
-  path = require('path'),
-  webpack = require('webpack'),
-  webpackDevMiddleware = require('webpack-dev-middleware');
-
-const config = require('./webpack.config.js');
-const compiler = webpack(config);
+  path = require('path');
 
 // routes
 const index = require('./routes/index');
@@ -23,12 +18,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-app.use(webpackDevMiddleware(compiler, {
-  publicPath: config.output.publicPath
-}));
 
 app.use('/', index);
 
@@ -46,8 +35,10 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  res.status(err.status || 500).json({
+    message: err.message,
+    error: err
+  });
 });
 
 /**
@@ -62,6 +53,7 @@ app.set('port', port);
  */
 
 let server = http.createServer(app);
+let io = require('socket.io')(server);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -130,3 +122,7 @@ function onListening() {
     : 'port ' + addr.port;
   console.log('Listening on ' + bind);
 }
+
+io.on('connection', function (socket) {
+  socket.emit('tweet', { message: 'test' });
+});
