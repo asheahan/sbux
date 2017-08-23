@@ -4,4 +4,8 @@ This project streams "Starbucks" filtered [Twitter](https://twitter.com/) tweets
 
 ### Components
 
-A Python producer is used to connect to the Twitter firehose and sends the data to a RabbitMQ queue. A Python consumer reads from the queue and saves the data into a Postgres database. A Node.js API will read from the database and push the data to a ReactJS frontend app using socket.io.
+A Python producer is used to connect to the Twitter firehose and sends the data to a RabbitMQ queue. A Python consumer reads from the queue and saves the data into a Postgres database. A Node.js API will read from the database and push the data to a frontend app using socket.io.
+
+### Process Workflow
+
+![process](process.PNG)
