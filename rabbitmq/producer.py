@@ -6,7 +6,7 @@ import time
 import tweepy
 
 # Load auth configuration from file
-with open('./config.json') as config_file:
+with open('../config.json') as config_file:
     TWITTER_CONFIG = json.load(config_file)["twitter"]
 
 AUTH = tweepy.OAuthHandler(TWITTER_CONFIG["consumer_key"], TWITTER_CONFIG["consumer_secret"])

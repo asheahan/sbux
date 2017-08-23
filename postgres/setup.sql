@@ -17,3 +17,14 @@ CREATE TABLE tweets (
     geo text,
     src text
 )
+
+CREATE FUNCTION notify_trigger() RETURNS trigger AS $$
+DECLARE
+BEGIN
+    PERFORM pg_notify('tweets', NEW.message);
+    RETURN new;
+END;
+$$ LANGUAGE plpgsql
+
+CREATE TRIGGER sbux_tweets_trigger AFTER INSERT ON tweets
+FOR EACH ROW EXECUTE PROCEDURE notify_trigger();

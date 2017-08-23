@@ -5,7 +5,7 @@ import psycopg2 as pg
 import time
 
 # Load db configuration from file
-with open('./config.json') as config_file:
+with open('../config.json') as config_file:
     DB_CONFIG = json.load(config_file)["postgres"]
 
 # setup queue

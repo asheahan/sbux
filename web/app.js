@@ -1,11 +1,16 @@
 'use strict';
 
 const bodyParser = require('body-parser'),
+  config = require('../config.json'),
   cookieParser = require('cookie-parser'),
   express = require('express'),
   favicon = require('serve-favicon'),
   http = require('http'),
-  path = require('path');
+  path = require('path'),
+  pg = require('pg');
+
+// db connection
+let connectionString = `postgres://${config.postgres.user}:${config.postgres.password}@${config.postgres.host}/${config.postgres.db}`;
 
 // routes
 const index = require('./routes/index');
@@ -123,6 +128,19 @@ function onListening() {
   console.log('Listening on ' + bind);
 }
 
-io.on('connection', function (socket) {
-  socket.emit('tweet', { message: 'test' });
+// listen for database updates and emit to all connections
+pg.connect(connectionString, function (err, client) {
+  if (err) {
+    console.log(err);
+  }
+
+  client.on('notification', function (msg) {
+    io.emit('tweet', msg);
+  });
+
+  let query = client.query('LISTEN tweets');
 });
+
+// io.on('connection', function (socket) {
+//   socket.emit('tweet', { message: 'test' });
+// });
